@@ -38,6 +38,8 @@ stages:
 
   - stage: Deploytest
     displayName: 'test du deploiement appli'
+    condition: succeeded()
+    dependsOn: Build
     jobs:
       - job: Deploy
         displayName: Deploy
