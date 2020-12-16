@@ -84,7 +84,7 @@ stages:
                 ansibleInterface: 'remoteMachine'
                 connectionOverSsh: 'VmConnexionAnsible'
                 playbookSourceRemoteMachine: 'agentMachine'
-                playbookRootRemoteMachine: '$(Build.SourcesDirectory)/ansible'
+                playbookRootRemoteMachine: '$(Pipeline.Workspace)/drop/ansible'
                 playbookPathLinkedArtifactOnRemoteMachine: 'main.yml'
                 inventoriesRemoteMachine: 'hostList'
                 inventoryHostListRemoteMachine: '137.116.94.5'
@@ -97,7 +97,7 @@ stages:
                 appType: 'webApp'
                 WebAppName: '$(webappName)'
                 #packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.war'
-                packageForLinux: '$(Pipeline.Workspace)/**/*.war'
+                packageForLinux: '$(Pipeline.Workspace)/drop/target/ROOT.war'
                 AppSettings: '-SPRING_DATASOURCE_USERNAME $(mysqlAdmin)@$(mysqlServerName) -SPRING_DATASOURCE_PASSWORD $(mysqlAdminSecret) -SPRING_DATASOURCE_URL jdbc:mysql://$(mysqlServerName).mysql.database.azure.com:3306/hotel_coupon?useSSL=true&requireSSL=false'
                 TakeAppOfflineFlag: true
                 RemoveAdditionalFilesFlag: true
