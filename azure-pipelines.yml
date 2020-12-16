@@ -46,14 +46,14 @@ stages:
               publishLocation: 'Container'
 
   - stage: Deploytest
-    displayName: 'test du deploiement appli'
+    displayName: 'Test du déploiement'
     condition: succeeded()
     dependsOn: Build
     jobs:
     - deployment: DeploymentJob
     pool:
       vmImage: 'ubuntu-latest'
-      environment: $(environmentName)
+      environment: 'Dev'
       strategy:
         runOnce:
           deploy:
