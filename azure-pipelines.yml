@@ -3,6 +3,15 @@ trigger:
 
 pool:
   vmImage: 'ubuntu-latest'
+variables:
+  resource_group: RG-Smart-Hotel
+  location: West Europe
+  webapp_name: smh360007
+  mysqlserver_name: smhmysql360007
+  mysqldb_name: hotel_coupon
+  admin_username: vmadmin
+  admin_password: Password123$  
+
 
 stages:
   - stage: Build
@@ -55,7 +64,19 @@ stages:
               tokenPrefix: '__'
               tokenSuffix: '__'
               useLegacyPattern: false
-              enableTelemetry: true              
+              enableTelemetry: true
+
+          - task: Ansible@0
+            inputs:
+              ansibleInterface: 'remoteMachine'
+              connectionOverSsh: 'VmConnexionAnsible'
+              playbookSourceRemoteMachine: 'agentMachine'
+              playbookRootRemoteMachine: '$(Build.SourcesDirectory)/ansible'
+              playbookPathLinkedArtifactOnRemoteMachine: 'main.yml'
+              inventoriesRemoteMachine: 'hostList'
+              inventoryHostListRemoteMachine: '137.116.94.5'
+              failOnStdErr: false              
+
 
               
   
