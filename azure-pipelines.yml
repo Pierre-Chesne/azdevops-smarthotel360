@@ -2,7 +2,7 @@ trigger:
 - dev
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'ubuntu-20.04'
 
 variables:
   location: 'West Europe'
@@ -15,7 +15,7 @@ variables:
 
 stages:
   - stage: Build
-    displayName: 'Build Appli Coupon'
+    displayName: 'Build Application Coupon'
     jobs:
       - job: Build
         displayName: Build
@@ -56,20 +56,21 @@ stages:
               ArtifactName: 'drop'
               publishLocation: 'Container'
 
-  - stage: Deploytest
-    displayName: 'Test du déploiement'
+  - stage: DeploymentTest
+    displayName: 'Déploiement vers Test'
     condition: succeeded()
     dependsOn: Build
     jobs:
-    - deployment: DeploymentJob
+    - deployment: DeploymentTest
       pool:
-        vmImage: 'ubuntu-latest'
+        vmImage: 'ubuntu-20.04'
       environment: Dev
       strategy:
         runOnce:
           deploy:
             steps:
             - task: replacetokens@3
+              displayName: 'Replace Tokens'
               inputs:
                 targetFiles: '$(Pipeline.Workspace)/drop/ansible/main.yml'
                 encoding: 'auto'
@@ -81,19 +82,6 @@ stages:
                 tokenSuffix: '__'
                 useLegacyPattern: false
                 enableTelemetry: true
-
-            - task: AzureRmWebAppDeployment@4
-              inputs:
-                ConnectionType: 'AzureRM'
-                azureSubscription: 'AzureConnexion'
-                appType: 'webApp'
-                WebAppName: '$(webappName)'
-                #packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.war'
-                packageForLinux: '$(Pipeline.Workspace)/drop/target/ROOT.war'
-                AppSettings: '-SPRING_DATASOURCE_USERNAME $(mysqlAdmin)@$(mysqlServerName) -SPRING_DATASOURCE_PASSWORD $(mysqlAdminSecret) -SPRING_DATASOURCE_URL jdbc:mysql://$(mysqlServerName).mysql.database.azure.com:3306/hotel_coupon?useSSL=true&requireSSL=false'
-                TakeAppOfflineFlag: true
-                RemoveAdditionalFilesFlag: true
-
             - task: Ansible@0
               inputs:
                 ansibleInterface: 'remoteMachine'
@@ -104,5 +92,14 @@ stages:
                 inventoriesRemoteMachine: 'hostList'
                 inventoryHostListRemoteMachine: '137.116.94.5'
                 failOnStdErr: false
-
-                      
+            - task: AzureRmWebAppDeployment@4
+              displayName: 'Déploiement du website'
+              inputs:
+                ConnectionType: 'AzureRM'
+                azureSubscription: 'AzureConnexion'
+                appType: 'webApp'
+                WebAppName: '$(webappName)'
+                packageForLinux: '$(Pipeline.Workspace)/drop/target/ROOT.war'
+                AppSettings: '-SPRING_DATASOURCE_USERNAME $(mysqlAdmin)@$(mysqlServerName) -SPRING_DATASOURCE_PASSWORD $(mysqlAdminSecret) -SPRING_DATASOURCE_URL jdbc:mysql://$(mysqlServerName).mysql.database.azure.com:3306/hotel_coupon?useSSL=true&requireSSL=false'
+                TakeAppOfflineFlag: true
+                RemoveAdditionalFilesFlag: true              
