@@ -2,13 +2,13 @@
 - hosts: localhost
 
   vars:
-    resource_group: __resourceGroupName__
-    location: __location__
-    webapp_name: __webappName__
-    mysqlserver_name: __mysqlServerName__
-    mysqldb_name: __mysqlDbName__
-    admin_username: __mysqlAdmin__
-    admin_password: __mysqlAdminSecret__
+  resource_group: 'RG-Smart-Hotel'
+  location: 'West Europe'
+  webapp_name: 'smh360007'
+  mysqlserver_name: 'smhmysql360007'
+  mysqldb_name: 'hotel_coupon'
+  admin_username: 'vmadmin'
+  admin_password: 'Password123$'
 
 
   tasks:

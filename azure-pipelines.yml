@@ -4,14 +4,7 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-variables:
-  resource_group: 'RG-Smart-Hotel'
-  location: 'West Europe'
-  webapp_name: 'smh360007'
-  mysqlserver_name: 'smhmysql360007'
-  mysqldb_name: 'hotel_coupon'
-  admin_username: 'vmadmin'
-  admin_password: 'Password123$'
+
 
 stages:
   - stage: Build
