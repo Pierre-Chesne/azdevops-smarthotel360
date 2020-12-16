@@ -75,16 +75,4 @@ stages:
               playbookPathLinkedArtifactOnRemoteMachine: 'main.yml'
               inventoriesRemoteMachine: 'hostList'
               inventoryHostListRemoteMachine: '137.116.94.5'
-              failOnStdErr: false              
-
-
-              
-  
-              
-
-              
-              
-
-
-  
-    
+              failOnStdErr: false
