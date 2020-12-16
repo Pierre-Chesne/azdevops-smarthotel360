@@ -53,44 +53,44 @@ stages:
     - deployment: DeploymentJob
       pool:
         vmImage: 'ubuntu-latest'
-        environment: Dev
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-              - task: replacetokens@3
-                inputs:
-                  targetFiles: '**/*.yml'
-                  encoding: 'auto'
-                  writeBOM: true
-                  escapeType: 'none'
-                  actionOnMissing: 'warn'
-                  keepToken: false
-                  tokenPrefix: '__'
-                  tokenSuffix: '__'
-                  useLegacyPattern: false
-                  enableTelemetry: true
+      environment: Dev
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - task: replacetokens@3
+              inputs:
+                targetFiles: '**/*.yml'
+                encoding: 'auto'
+                writeBOM: true
+                escapeType: 'none'
+                actionOnMissing: 'warn'
+                keepToken: false
+                tokenPrefix: '__'
+                tokenSuffix: '__'
+                useLegacyPattern: false
+                enableTelemetry: true
 
-              - task: Ansible@0
-                inputs:
-                  ansibleInterface: 'remoteMachine'
-                  connectionOverSsh: 'VmConnexionAnsible'
-                  playbookSourceRemoteMachine: 'agentMachine'
-                  playbookRootRemoteMachine: '$(Build.SourcesDirectory)/ansible'
-                  playbookPathLinkedArtifactOnRemoteMachine: 'main.yml'
-                  inventoriesRemoteMachine: 'hostList'
-                  inventoryHostListRemoteMachine: '137.116.94.5'
-                  failOnStdErr: false
+            - task: Ansible@0
+              inputs:
+                ansibleInterface: 'remoteMachine'
+                connectionOverSsh: 'VmConnexionAnsible'
+                playbookSourceRemoteMachine: 'agentMachine'
+                playbookRootRemoteMachine: '$(Build.SourcesDirectory)/ansible'
+                playbookPathLinkedArtifactOnRemoteMachine: 'main.yml'
+                inventoriesRemoteMachine: 'hostList'
+                inventoryHostListRemoteMachine: '137.116.94.5'
+                failOnStdErr: false
 
-              - task: AzureRmWebAppDeployment@4
-                inputs:
-                  ConnectionType: 'AzureRM'
-                  azureSubscription: 'AzureConnexion'
-                  appType: 'webApp'
-                  WebAppName: '$(webappName)'
-                  #packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.war'
-                  packageForLinux: '$(Pipeline.Workspace)/**/*.war'
-                  AppSettings: '-SPRING_DATASOURCE_USERNAME $(mysqlAdmin)@$(mysqlServerName) -SPRING_DATASOURCE_PASSWORD $(mysqlAdminSecret) -SPRING_DATASOURCE_URL jdbc:mysql://$(mysqlServerName).mysql.database.azure.com:3306/hotel_coupon?useSSL=true&requireSSL=false'
-                  TakeAppOfflineFlag: true
-                  RemoveAdditionalFilesFlag: true
+            - task: AzureRmWebAppDeployment@4
+              inputs:
+                ConnectionType: 'AzureRM'
+                azureSubscription: 'AzureConnexion'
+                appType: 'webApp'
+                WebAppName: '$(webappName)'
+                #packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.war'
+                packageForLinux: '$(Pipeline.Workspace)/**/*.war'
+                AppSettings: '-SPRING_DATASOURCE_USERNAME $(mysqlAdmin)@$(mysqlServerName) -SPRING_DATASOURCE_PASSWORD $(mysqlAdminSecret) -SPRING_DATASOURCE_URL jdbc:mysql://$(mysqlServerName).mysql.database.azure.com:3306/hotel_coupon?useSSL=true&requireSSL=false'
+                TakeAppOfflineFlag: true
+                RemoveAdditionalFilesFlag: true
                       
