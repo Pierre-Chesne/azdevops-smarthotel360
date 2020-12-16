@@ -3,6 +3,7 @@ trigger:
 
 pool:
   vmImage: 'ubuntu-latest'
+
 variables:
   resource_group: 'RG-Smart-Hotel'
   location: 'West Europe'
@@ -73,5 +74,5 @@ stages:
               playbookRootRemoteMachine: '$(Build.SourcesDirectory)/ansible'
               playbookPathLinkedArtifactOnRemoteMachine: 'main.yml'
               inventoriesRemoteMachine: 'hostList'
-              inventoryHostListRemoteMachine: '137.116.94.5'
+              #inventoryHostListRemoteMachine: '137.116.94.5'
               failOnStdErr: false
