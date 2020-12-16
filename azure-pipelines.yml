@@ -15,7 +15,7 @@ variables:
 
 stages:
   - stage: Build
-    displayName: 'Build Application Coupon'
+    displayName: 'Build Application'
     jobs:
       - job: Build
         displayName: Build
@@ -56,12 +56,12 @@ stages:
               ArtifactName: 'drop'
               publishLocation: 'Container'
 
-  - stage: DeploymentTest
-    displayName: 'Déploiement vers Test'
+  - stage: Deployment
+    displayName: 'Deployment'
     condition: succeeded()
     dependsOn: Build
     jobs:
-    - deployment: DeploymentTest
+    - deployment: Deployment
       pool:
         vmImage: 'ubuntu-20.04'
       environment: Dev
@@ -93,7 +93,7 @@ stages:
                 inventoryHostListRemoteMachine: '137.116.94.5'
                 failOnStdErr: false
             - task: AzureRmWebAppDeployment@4
-              displayName: 'Déploiement du website'
+              displayName: 'Deploy website'
               inputs:
                 ConnectionType: 'AzureRM'
                 azureSubscription: 'AzureConnexion'
