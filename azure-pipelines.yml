@@ -36,6 +36,7 @@ stages:
               SourceFolder: '$(Build.SourcesDirectory)'
               Contents: |
                 **/*.war
+                Ansible/main.yml
               TargetFolder: '$(build.artifactstagingdirectory)'
             condition: succeededOrFailed()
             
