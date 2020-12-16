@@ -74,5 +74,5 @@ stages:
               playbookRootRemoteMachine: '$(Build.SourcesDirectory)/ansible'
               playbookPathLinkedArtifactOnRemoteMachine: 'main.yml'
               inventoriesRemoteMachine: 'hostList'
-              #inventoryHostListRemoteMachine: '137.116.94.5'
+              inventoryHostListRemoteMachine: '137.116.94.5'
               failOnStdErr: false
