@@ -35,6 +35,26 @@ stages:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)'
               ArtifactName: 'drop'
               publishLocation: 'Container'
+
+  - stage: Deploytest
+    displayName: 'test du deploiement appli'
+    jobs:
+      - job: Deploy
+        displayName: Deploy
+        steps:
+          - task: replacetokens@3
+            inputs:
+              targetFiles: '**/*.yml'
+              encoding: 'auto'
+              writeBOM: true
+              escapeType: 'none'
+              actionOnMissing: 'warn'
+              keepToken: false
+              tokenPrefix: '__'
+              tokenSuffix: '__'
+              useLegacyPattern: false
+              enableTelemetry: true              
+
               
   
               
