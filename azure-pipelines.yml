@@ -36,10 +36,17 @@ stages:
               SourceFolder: '$(Build.SourcesDirectory)'
               Contents: |
                 **/*.war
-                Ansible/main.yml
               TargetFolder: '$(build.artifactstagingdirectory)'
             condition: succeededOrFailed()
-            
+
+          - task: CopyFiles@2
+            inputs:
+              SourceFolder: '$(Build.SourcesDirectory)'
+              Contents: |
+                **/main.yml
+              TargetFolder: '$(build.artifactstagingdirectory)'
+            condition: succeededOrFailed()
+
           - task: PublishBuildArtifacts@1
             inputs:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)'
