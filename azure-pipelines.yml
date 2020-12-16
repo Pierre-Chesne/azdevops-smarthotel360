@@ -71,7 +71,7 @@ stages:
             steps:
             - task: replacetokens@3
               inputs:
-                targetFiles: '**/*.yml'
+                targetFiles: '$(Pipeline.Workspace)/drop/ansible/main.yml'
                 encoding: 'auto'
                 writeBOM: true
                 escapeType: 'none'
