@@ -1,11 +1,11 @@
 trigger:
-- dev
+- dev # change dans la branch "dev"
 
 pool:
-  vmImage: 'ubuntu-20.04'
+  vmImage: 'ubuntu-20.04' # Agent Azure Devops Ubuntu
 
 variables:
-  location: 'West Europe'
+  location: 'West Europe' # Variable region Azure, les autres variables sont stockées 
 
 stages:
   - stage: Build
@@ -14,7 +14,7 @@ stages:
       - job: Build
         displayName: Build
         steps:
-          - task: Maven@3
+          - task: Maven@3 # Creation du package 'ROOT.war'
             inputs:
               mavenPomFile: 'pom.xml'
               mavenOptions: '-Xmx3072m'
@@ -25,7 +25,7 @@ stages:
               testResultsFiles: '**/surefire-reports/TEST-*.xml'
               goals: 'package'
 
-          - task: CopyFiles@2
+          - task: CopyFiles@2 # copy du package 'ROOT.war' dans le repertoire 'artifactstagingdirectory'
             displayName: 'Copy War'
             inputs:
               SourceFolder: '$(Build.SourcesDirectory)'
@@ -34,7 +34,7 @@ stages:
               TargetFolder: '$(build.artifactstagingdirectory)'
             condition: succeededOrFailed()
 
-          - task: CopyFiles@2
+          - task: CopyFiles@2 # copy du Playbook Ansible dans le repertoire 'artifactstagingdirectory'
             displayName: 'Copy Ansible file'
             inputs:
               SourceFolder: '$(Build.SourcesDirectory)'
@@ -43,7 +43,7 @@ stages:
               TargetFolder: '$(build.artifactstagingdirectory)'
             condition: succeededOrFailed()
 
-          - task: PublishBuildArtifacts@1
+          - task: PublishBuildArtifacts@1 # publication des artefacts (ROOT.war & main.yml)
             displayName: 'Publish artifacts'
             inputs:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)'
@@ -51,7 +51,7 @@ stages:
               publishLocation: 'Container'
 
   - stage: Deployment
-    displayName: 'Deployment'
+    displayName: 'Test Deployment'
     condition: succeeded()
     dependsOn: Build
     jobs:
