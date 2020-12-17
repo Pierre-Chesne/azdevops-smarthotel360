@@ -12,7 +12,7 @@ stages:
     displayName: 'Build Application'
     jobs:
       - job: Build
-        displayName: Build
+        displayName: Build        
         steps:
           - task: Maven@3 # Creation du package 'ROOT.war'
             inputs:
@@ -63,7 +63,7 @@ stages:
         runOnce:
           deploy:
             steps:
-            - task: replacetokens@3
+            - task: replacetokens@3 # "Mapping" des variables "__variable__" dans le "playbook Ansible" et variables AzureDevops
               displayName: 'Replace Tokens'
               inputs:
                 targetFiles: '$(Pipeline.Workspace)/drop/ansible/main.yml'
@@ -76,7 +76,8 @@ stages:
                 tokenSuffix: '__'
                 useLegacyPattern: false
                 enableTelemetry: true
-            - task: Ansible@0
+
+            - task: Ansible@0 # Ansible-playbook main.yml (depuis une VM Ansible dans Azure)
               inputs:
                 ansibleInterface: 'remoteMachine'
                 connectionOverSsh: 'VmConnexionAnsible'
@@ -86,7 +87,8 @@ stages:
                 inventoriesRemoteMachine: 'hostList'
                 inventoryHostListRemoteMachine: '137.116.94.5'
                 failOnStdErr: false
-            - task: AzureRmWebAppDeployment@4
+
+            - task: AzureRmWebAppDeployment@4 # Déploiement du package ROOT.war dans la Web App
               displayName: 'Deploy website'
               inputs:
                 ConnectionType: 'AzureRM'
